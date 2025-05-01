@@ -1,0 +1,93 @@
+---
+title: "Movies Notebook"
+output: html_notebook
+---
+1. **Read the Data File (Movies.csv)
+If you have the Movies.csv file uploaded or placed in a directory, you can use the read.csv function to load it into R.
+# Read the Movies.csv file into a data frame
+
+install.packages("readr")
+library(readr)
+movies_data <- read.csv("path/to/Movies.csv")
+
+2. Summarize the Data
+You can use the dplyr package to group by Director_1 and calculate the count of movies and the sum of revenue.
+
+First, make sure you have the dplyr package installed:
+# Install dplyr if you haven't already
+install.packages("dplyr")
+
+Then, use the following code to group the data and calculate the required summary:
+# Load the dplyr package
+library(dplyr)
+# Summarize the data: count movies and sum revenue by Director_1
+summary_data <- movies_data %>%
+  group_by(Director_1) %>%
+  summarise(
+    Movies_count = n(), # Count the number of movies per director
+Total_Revenue = sum(Revenue, na.rm = TRUE)  # Sum of Revenue, ignoring NA values
+  ) %>%
+  arrange(desc(Total_Revenue))  # Order by Total_Revenue in descending order
+  
+3. Save the Result as a New Table (Optional)
+If you'd like to save the result to a new CSV file:
+# Save the summarized result to a new CSV file
+write.csv(summary_data, "Director1_summary.csv", row.names = FALSE)
+This will save the summarized data with directors, movie counts, and total revenue as a new CSV file called Director1_summary.csv.
+
+# View the resultummary_data <- movies_data %>%
+  summary_data <- movies_data %>%
++     group_by(Director._1_) %>%
++     summarise(
++         Movies_count = n(), 
++         Total_Revenue = sum(Revenue, na.rm = TRUE)
++     ) %>%
++     arrange(desc(Total_Revenue))
+print(summary_data)
+
+
+
+# View the result
+> print(summary_data)
+
+# A tibble: 414 × 3
+   Director._1_     Movies_count Total_Revenue
+   <chr>                   <int>         <int>
+ 1 Chris Renaud                3    2044500000
+ 2 Zack Snyder                 2    1540700000
+ 3 Francis Lawrence            2    1408800000
+ 4 Bryan Singer                2    1292500000
+ 5 Steve Martino               2    1123200000
+ 6 Ridley Scott                2    1033600000
+ 7 Justin Lin                  2    1031700000
+ 8 Phil Lord                   3    1002000000
+ 9 Peter Jackson               1     956000000
+10 David Ayer                  4     914100000
+# ℹ 404 more rows
+# ℹ Use `print(n = ...)` to see more rows
+> 
+That means your grouping, summarizing, and sorting are now all working correctly in RStudio.
+
+You now have a nice summary table showing:
+
+Director name (Director _1_)
+
+Number of movies (Movies_count)
+
+Total revenue (Total_Revenue), ordered from highest to lowest.
+
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+ggplot(data=Movies)
