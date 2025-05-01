@@ -1,8 +1,11 @@
 ---
 title: "Movies Data Analysis in R"
+author: "Sonia Dalal"
+date: "`r Sys.Date()`"
 output:
   html_document:
     df_print: paged
+    css: style.css
 editor_options:
   markdown:
     wrap: 72
@@ -308,13 +311,14 @@ After grouping and summarizing, the data is sorted in descending order of Total_
 
 
 # Data visualization using ggplot**
- Visualize the distribution of the 'Revenue' column
+
+Visualize the distribution of the 'Revenue' column
 
 ```{r}
 boxplot(movies_data_clean$Revenue)
 ```
 
-# Distribution of Revenue by Genre
+Distribution of Revenue by Genre
 This plot shows the distribution of revenue for each genre using a boxplot.
 
 ```{r}
@@ -362,14 +366,6 @@ theme_minimal():
 
 theme_minimal(): This applies a minimal theme to the plot, which reduces the clutter and focuses on the data. It removes background grids and other elements to make the plot cleaner and easier to read.
 
+# Conclusion
+This project successfully cleaned, transformed, and analyzed a movie dataset. The use of dplyr and ggplot2 enabled effective exploration and visualization of revenue trends across genres and directors. The findings can help production houses and marketers make more data-driven decisions.
 
-
-
-```{r}
-boxplot(movies_data_clean$Revenue)
-```
-or alternative code is 
-```{r}
-boxplot(movies_data_clean[, "Revenue"])
-```
-It shows same result as above.
