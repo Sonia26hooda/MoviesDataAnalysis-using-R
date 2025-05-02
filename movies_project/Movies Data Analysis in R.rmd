@@ -366,6 +366,89 @@ theme_minimal():
 
 theme_minimal(): This applies a minimal theme to the plot, which reduces the clutter and focuses on the data. It removes background grids and other elements to make the plot cleaner and easier to read.
 
+# Revenue Distribution by Genre (Histogram)
+You can visualize the distribution of revenue within each genre using a histogram. It will show how revenues are spread out and if some genres tend to have higher earnings.
+
+```{r}
+ggplot(movies_data_clean, aes(x = Revenue, fill = Genre)) +
+  geom_histogram(bins = 30, color = "blue", alpha = 0.8) +
+  labs(title = "Revenue Distribution by Genre", x = "Revenue", y = "Count") +
+  theme_minimal() +
+  facet_wrap(~ Genre, scales = "free_y")
+```
+
+# Revenue Distribution by Genre (Violin Plot)
+A violin plot can show the distribution of revenues for each genre and how they compare in terms of spread and central tendency.
+
+```{r}
+ggplot(movies_data_clean, aes(x = Genre, y = Revenue, fill = Genre)) +
+  geom_violin() +
+  labs(title = "Revenue Distribution by Genre", x = "Genre", y = "Revenue") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+# Top 10 Movies by Revenue (Bar Chart)
+You can identify the top 10 movies in terms of revenue, which could give additional insights into the biggest blockbusters.
+
+```{r}
+top_movies <- movies_data_clean %>%
+  arrange(desc(Revenue)) %>%
+  head(10)
+
+ggplot(top_movies, aes(x = reorder(Movie.Title, Revenue), y = Revenue, fill = Genre)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  labs(title = "Top 10 Movies by Revenue", x = "Movie", y = "Revenue") +
+  theme_minimal()
+```
+# Revenue vs. Profit (Bubble Chart)
+Show the relationship between Revenue and Profit using a bubble chart. The size of the bubble can represent the budget of the movie.
+
+```{r}
+
+movies_data_profit <- movies_data %>%
+  mutate(Profit = Revenue - Budget)
+```
+
+```{r}
+movies_data_clean <- movies_data_clean %>%
+  mutate(Profit = Revenue - Budget)
+```
+
+```{r}
+ggplot(movies_data_clean, aes(x = Revenue, y = Profit, size = Budget, color = Genre)) +
+  geom_point(alpha = 0.6) +
+  labs(title = "Revenue vs. Profit by Genre", x = "Revenue", y = "Profit") +
+  scale_size_continuous(range = c(3, 15)) +
+  theme_minimal()
+```
+
+# Bubble Chart: Budget vs Revenue with Profit as Bubble Size
+
+
+```{r}
+ggplot(movies_data_clean, aes(x = Budget, y = Revenue, size = Profit, color = Genre)) +
+  geom_point(alpha = 0.6) +
+  scale_size_continuous(range = c(2, 10)) +  # Adjust bubble sizes
+  labs(
+    title = "Bubble Chart: Budget vs Revenue (Bubble = Profit)",
+    x = "Budget",
+    y = "Revenue",
+    size = "Profit"
+  ) +
+  theme_minimal()
+```
+** Explanation:
+x = Budget, y = Revenue: X and Y axes.
+
+size = Profit: Bubble size shows how profitable each movie was.
+
+color = Genre: Helps differentiate genres visually.
+
+alpha = 0.6: Makes bubbles semi-transparent so overlaps are easier to interpret.
+
+scale_size_continuous(): Controls bubble size scaling.
+
 # Conclusion
 This project successfully cleaned, transformed, and analyzed a movie dataset. The use of dplyr and ggplot2 enabled effective exploration and visualization of revenue trends across genres and directors. The findings can help production houses and marketers make more data-driven decisions.
 
