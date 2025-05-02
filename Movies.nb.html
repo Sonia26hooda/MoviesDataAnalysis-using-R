@@ -1755,32 +1755,95 @@ display: none;
 <ol style="list-style-type: decimal">
 <li>**Read the Data File (Movies.csv) If you have the Movies.csv file
 uploaded or placed in a directory, you can use the read.csv function to
-load it into R. # Read the Movies.csv file into a data frame</li>
+load it into R. # Read and load the data (Movies.csv file) into a data
+frame</li>
 </ol>
 <p>install.packages(“readr”) library(readr) movies_data &lt;-
 read.csv(“path/to/Movies.csv”)</p>
 <ol start="2" style="list-style-type: decimal">
-<li>Summarize the Data You can use the dplyr package to group by
-Director_1 and calculate the count of movies and the sum of
-revenue.</li>
+<li><h1 id="data-cleaning-steps-you-can-perform-in-rstudio-cloud">Data
+cleaning steps you can perform in RStudio Cloud:</h1></li>
 </ol>
-<p>First, make sure you have the dplyr package installed: # Install
-dplyr if you haven’t already install.packages(“dplyr”)</p>
+<p>Load your data (e.g., from CSV).</p>
+<p>Explore the data using head(), summary(), and str().</p>
+<p>Handle missing values: Remove or impute with mean/median.</p>
+<p>Remove duplicates with duplicated().</p>
+<p>Fix column names to avoid spaces and special characters.</p>
+<p>Filter out irrelevant rows or columns.</p>
+<p>Transform data (e.g., converting types, creating new columns).</p>
+<p>Handle outliers by removing or correcting.</p>
+<p>Standardize categorical variables for consistency.</p>
+<p>Save your cleaned data to a new file.</p>
+<p>Summarize the Data You can use the dplyr package to group by
+Director_1 and calculate the count of movies and the sum of revenue.</p>
+<p>First, make sure you have the dplyr package installed:</p>
+<p>Install dplyr if you haven’t already
+<code>install.packages(&quot;dplyr&quot;)</code></p>
 <p>Then, use the following code to group the data and calculate the
-required summary: # Load the dplyr package library(dplyr) # Summarize
-the data: count movies and sum revenue by Director_1 summary_data &lt;-
-movies_data %&gt;% group_by(Director_1) %&gt;% summarise( Movies_count =
-n(), # Count the number of movies per director Total_Revenue =
-sum(Revenue, na.rm = TRUE) # Sum of Revenue, ignoring NA values ) %&gt;%
-arrange(desc(Total_Revenue)) # Order by Total_Revenue in descending
-order</p>
-<ol start="3" style="list-style-type: decimal">
-<li>Save the Result as a New Table (Optional) If you’d like to save the
-result to a new CSV file: # Save the summarized result to a new CSV file
-write.csv(summary_data, “Director1_summary.csv”, row.names = FALSE) This
-will save the summarized data with directors, movie counts, and total
-revenue as a new CSV file called Director1_summary.csv.</li>
-</ol>
+required summary: # Load the dplyr package library(dplyr)</p>
+<div id="view-the-first-few-rows-of-the-data" class="section level1">
+<h1>View the first few rows of the data</h1>
+<p>head(movies_data)</p>
+<p>#Steps to data Cleaning first of all explore the data and View the
+first few rows of the data head(movies_data) Movie.Title Release.Date
+Wikipedia.URL Genre 1 22 Jump Street 2014-06-04 <a href="https://en.wikipedia.org/wiki/22_Jump_Street" class="uri">https://en.wikipedia.org/wiki/22_Jump_Street</a> Action 2 71
+2014-02-07 <a href="https://en.wikipedia.org/wiki/%252771_(film)" class="uri">https://en.wikipedia.org/wiki/%252771_(film)</a> Action 3 A
+Good Day to Die Hard 2013-02-14 <a href="https://en.wikipedia.org/wiki/A_Good_Day_to_Die_Hard" class="uri">https://en.wikipedia.org/wiki/A_Good_Day_to_Die_Hard</a>
+Action 4 Battleship 2012-05-18 <a href="https://en.wikipedia.org/wiki/Battleship_(film)" class="uri">https://en.wikipedia.org/wiki/Battleship_(film)</a> Action 5
+Black Mass 2015-09-04 <a href="https://en.wikipedia.org/wiki/Black_Mass_(film)" class="uri">https://en.wikipedia.org/wiki/Black_Mass_(film)</a> Action 6
+Criminal 2016-04-15 <a href="https://en.wikipedia.org/wiki/Criminal_(2016_film)" class="uri">https://en.wikipedia.org/wiki/Criminal_(2016_film)</a>
+Action Director._1_ Director._2_ Cast._1_ Cast._2_ Cast._3_ Cast._4_ 1
+Phil Lord Chris Miller Channing Tatum Jonah Hill Ice Cube<br />
+2 Yann Demange Jack O’Connell Richard Dormer Sean Harris Sam Reid 3 John
+Moore Bruce Willis Jai Courtney Sebastian Koch Yuliya Snigir 4 Peter
+Berg Alexander Skarsgård Taylor Kitsch Brooklyn Decker Rihanna 5 Scott
+Cooper Johnny Depp Joel Edgerton Benedict Cumberbatch Sienna Miller 6
+Ariel Vromen Kevin Costner Gary Oldman Tommy Lee Jones Alice Eve
+Cast._5_ Budget Revenue 1 84500000 331300000 2 8100000 2900000 3
+Radivoje Bukvić 92000000 304700000 4 Liam Neeson 220000000 303000000 5
+Dakota Johnson 53000000 99800000 6 Gal Gadot 31500000 35600000 # Check
+the structure of the dataset (column names, data types)</p>
+<dl>
+<dt>str(movies_data) ‘data.frame’: 508 obs. of 13 variables: $
+Movie.Title</dt>
+<dd>
+chr “22 Jump Street” “71” “A Good Day to Die Hard” “Battleship” … $
+Release.Date : chr “2014-06-04” “2014-02-07” “2013-02-14” “2012-05-18” …
+$ Wikipedia.URL: chr “<a href="https://en.wikipedia.org/wiki/22_Jump_Street" class="uri">https://en.wikipedia.org/wiki/22_Jump_Street</a>” “<a href="https://en.wikipedia.org/wiki/%252771_(film)" class="uri">https://en.wikipedia.org/wiki/%252771_(film)</a>” “<a href="https://en.wikipedia.org/wiki/A_Good_Day_to_Die_Hard" class="uri">https://en.wikipedia.org/wiki/A_Good_Day_to_Die_Hard</a>”
+“<a href="https://en.wikipedia.org/wiki/Battleship_(film)" class="uri">https://en.wikipedia.org/wiki/Battleship_(film)</a>” … $
+Genre : chr “Action” “Action” “Action” “Action” … $ Director._1_ : chr
+“Phil Lord” “Yann Demange” “John Moore” “Peter Berg” … $ Director._2_ :
+chr “Chris Miller” “” “” “” … $ Cast._1_ : chr “Channing Tatum” “Jack
+O’Connell” “Bruce Willis” “Alexander Skarsgård” … $ Cast._2_ : chr
+“Jonah Hill” “Richard Dormer” “Jai Courtney” “Taylor Kitsch” … $
+Cast._3_ : chr “Ice Cube” “Sean Harris” “Sebastian Koch” “Brooklyn
+Decker” … $ Cast._4_
+</dd>
+<dd>
+chr “” “Sam Reid” “Yuliya Snigir” “Rihanna” … $ Cast._5_ : chr “” “”
+“Radivoje Bukvić” “Liam Neeson” … $ Budget : int 84500000 8100000
+92000000 220000000 53000000 31500000 235000000 140000000 94000000
+225000000 … $ Revenue : int 331300000 2900000 304700000 303000000
+99800000 35600000 710600000 145700000 414400000 668000000 …
+</dd>
+</dl>
+</div>
+<div id="summarize-the-data-count-movies-and-sum-revenue-by-director_1" class="section level1">
+<h1>Summarize the data: count movies and sum revenue by Director_1</h1>
+<p>summary_data &lt;- movies_data %&gt;% group_by(Director_1) %&gt;%
+summarise( Movies_count = n(), # Count the number of movies per director
+Total_Revenue = sum(Revenue, na.rm = TRUE) # Sum of Revenue, ignoring NA
+values ) %&gt;% arrange(desc(Total_Revenue)) # Order by Total_Revenue in
+descending order</p>
+<p>Save the Result as a New Table (Optional) If you’d like to save the
+result to a new CSV file:</p>
+</div>
+<div id="save-the-summarized-result-to-a-new-csv-file" class="section level1">
+<h1>Save the summarized result to a new CSV file</h1>
+<p>write.csv(summary_data, “Director1_summary.csv”, row.names = FALSE)
+This will save the summarized data with directors, movie counts, and
+total revenue as a new CSV file called Director1_summary.csv.</p>
+</div>
 <div id="view-the-resultummary_data---movies_data" class="section level1">
 <h1>View the resultummary_data &lt;- movies_data %&gt;%</h1>
 <p>summary_data &lt;- movies_data %&gt;% + group_by(Director._1_) %&gt;%
@@ -1801,14 +1864,29 @@ Renaud 3 2044500000 2 Zack Snyder 2 1540700000 3 Francis Lawrence 2
 1408800000 4 Bryan Singer 2 1292500000 5 Steve Martino 2 1123200000 6
 Ridley Scott 2 1033600000 7 Justin Lin 2 1031700000 8 Phil Lord 3
 1002000000 9 Peter Jackson 1 956000000 10 David Ayer 4 914100000 # ℹ 404
-more rows # ℹ Use <code>print(n = ...)</code> to see more rows &gt; That
-means your grouping, summarizing, and sorting are now all working
-correctly in RStudio.</p>
+more rows # ℹ Use <code>print(n = ...)</code> to see more rows</p>
+</div>
+<div id="that-means-your-grouping-summarizing-and-sorting-are-now-all-working-correctly-in-rstudio." class="section level1">
+<h1>That means your grouping, summarizing, and sorting are now all
+working correctly in RStudio.</h1>
 <p>You now have a nice summary table showing:</p>
 <p>Director name (Director <em>1</em>)</p>
 <p>Number of movies (Movies_count)</p>
 <p>Total revenue (Total_Revenue), ordered from highest to lowest.</p>
-<p>This is an <a href="http://rmarkdown.rstudio.com">R Markdown</a>
+</div>
+<div id="remove-rows-with-any-missing-values" class="section level1">
+<h1>Remove rows with any missing values</h1>
+<p>movies_data_clean &lt;- na.omit(movies_data) Removing rows with
+missing values.</p>
+</div>
+<div id="fill-na-values-in-a-specific-column-with-the-columns-mean" class="section level1">
+<h1>Fill NA values in a specific column with the column’s mean</h1>
+<p>movies_data<span class="math inline">\(Revenue[is.na(movies_data\)</span>Revenue)] &lt;-
+mean(movies_data$Revenue, na.rm = TRUE) You can fill missing values with
+the mean, median, or mode, depending on the nature of the column. #
+Remove duplicate rows movies_data_clean &lt;-
+movies_data[!duplicated(movies_data), ]</p>
+<p>[This is an <a href="http://rmarkdown.rstudio.com">R Markdown</a>
 Notebook. When you execute code within the notebook, the results appear
 beneath the code.</p>
 <p>Try executing this chunk by clicking the <em>Run</em> button within
@@ -1831,11 +1909,11 @@ press <em>Ctrl+Shift+K</em> to preview the HTML file).</p>
 <p>The preview shows you a rendered HTML copy of the contents of the
 editor. Consequently, unlike <em>Knit</em>, <em>Preview</em> does not
 run any R code chunks. Instead, the output of the chunk when it was last
-run in the editor is displayed. ggplot(data=Movies)</p>
+run in the editor is displayed. ggplot(data=Movies) ]</p>
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiTW92aWVzIE5vdGVib29rIgpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sKLS0tCjEuICoqUmVhZCB0aGUgRGF0YSBGaWxlIChNb3ZpZXMuY3N2KQpJZiB5b3UgaGF2ZSB0aGUgTW92aWVzLmNzdiBmaWxlIHVwbG9hZGVkIG9yIHBsYWNlZCBpbiBhIGRpcmVjdG9yeSwgeW91IGNhbiB1c2UgdGhlIHJlYWQuY3N2IGZ1bmN0aW9uIHRvIGxvYWQgaXQgaW50byBSLgojIFJlYWQgdGhlIE1vdmllcy5jc3YgZmlsZSBpbnRvIGEgZGF0YSBmcmFtZQoKaW5zdGFsbC5wYWNrYWdlcygicmVhZHIiKQpsaWJyYXJ5KHJlYWRyKQptb3ZpZXNfZGF0YSA8LSByZWFkLmNzdigicGF0aC90by9Nb3ZpZXMuY3N2IikKCjIuIFN1bW1hcml6ZSB0aGUgRGF0YQpZb3UgY2FuIHVzZSB0aGUgZHBseXIgcGFja2FnZSB0byBncm91cCBieSBEaXJlY3Rvcl8xIGFuZCBjYWxjdWxhdGUgdGhlIGNvdW50IG9mIG1vdmllcyBhbmQgdGhlIHN1bSBvZiByZXZlbnVlLgoKRmlyc3QsIG1ha2Ugc3VyZSB5b3UgaGF2ZSB0aGUgZHBseXIgcGFja2FnZSBpbnN0YWxsZWQ6CiMgSW5zdGFsbCBkcGx5ciBpZiB5b3UgaGF2ZW4ndCBhbHJlYWR5Cmluc3RhbGwucGFja2FnZXMoImRwbHlyIikKClRoZW4sIHVzZSB0aGUgZm9sbG93aW5nIGNvZGUgdG8gZ3JvdXAgdGhlIGRhdGEgYW5kIGNhbGN1bGF0ZSB0aGUgcmVxdWlyZWQgc3VtbWFyeToKIyBMb2FkIHRoZSBkcGx5ciBwYWNrYWdlCmxpYnJhcnkoZHBseXIpCiMgU3VtbWFyaXplIHRoZSBkYXRhOiBjb3VudCBtb3ZpZXMgYW5kIHN1bSByZXZlbnVlIGJ5IERpcmVjdG9yXzEKc3VtbWFyeV9kYXRhIDwtIG1vdmllc19kYXRhICU+JQogIGdyb3VwX2J5KERpcmVjdG9yXzEpICU+JQogIHN1bW1hcmlzZSgKICAgIE1vdmllc19jb3VudCA9IG4oKSwgIyBDb3VudCB0aGUgbnVtYmVyIG9mIG1vdmllcyBwZXIgZGlyZWN0b3IKVG90YWxfUmV2ZW51ZSA9IHN1bShSZXZlbnVlLCBuYS5ybSA9IFRSVUUpICAjIFN1bSBvZiBSZXZlbnVlLCBpZ25vcmluZyBOQSB2YWx1ZXMKICApICU+JQogIGFycmFuZ2UoZGVzYyhUb3RhbF9SZXZlbnVlKSkgICMgT3JkZXIgYnkgVG90YWxfUmV2ZW51ZSBpbiBkZXNjZW5kaW5nIG9yZGVyCiAgCjMuIFNhdmUgdGhlIFJlc3VsdCBhcyBhIE5ldyBUYWJsZSAoT3B0aW9uYWwpCklmIHlvdSdkIGxpa2UgdG8gc2F2ZSB0aGUgcmVzdWx0IHRvIGEgbmV3IENTViBmaWxlOgojIFNhdmUgdGhlIHN1bW1hcml6ZWQgcmVzdWx0IHRvIGEgbmV3IENTViBmaWxlCndyaXRlLmNzdihzdW1tYXJ5X2RhdGEsICJEaXJlY3RvcjFfc3VtbWFyeS5jc3YiLCByb3cubmFtZXMgPSBGQUxTRSkKVGhpcyB3aWxsIHNhdmUgdGhlIHN1bW1hcml6ZWQgZGF0YSB3aXRoIGRpcmVjdG9ycywgbW92aWUgY291bnRzLCBhbmQgdG90YWwgcmV2ZW51ZSBhcyBhIG5ldyBDU1YgZmlsZSBjYWxsZWQgRGlyZWN0b3IxX3N1bW1hcnkuY3N2LgoKIyBWaWV3IHRoZSByZXN1bHR1bW1hcnlfZGF0YSA8LSBtb3ZpZXNfZGF0YSAlPiUKICBzdW1tYXJ5X2RhdGEgPC0gbW92aWVzX2RhdGEgJT4lCisgICAgIGdyb3VwX2J5KERpcmVjdG9yLl8xXykgJT4lCisgICAgIHN1bW1hcmlzZSgKKyAgICAgICAgIE1vdmllc19jb3VudCA9IG4oKSwgCisgICAgICAgICBUb3RhbF9SZXZlbnVlID0gc3VtKFJldmVudWUsIG5hLnJtID0gVFJVRSkKKyAgICAgKSAlPiUKKyAgICAgYXJyYW5nZShkZXNjKFRvdGFsX1JldmVudWUpKQpwcmludChzdW1tYXJ5X2RhdGEpCgoKCiMgVmlldyB0aGUgcmVzdWx0Cj4gcHJpbnQoc3VtbWFyeV9kYXRhKQoKIyBBIHRpYmJsZTogNDE0IMOXIDMKICAgRGlyZWN0b3IuXzFfICAgICBNb3ZpZXNfY291bnQgVG90YWxfUmV2ZW51ZQogICA8Y2hyPiAgICAgICAgICAgICAgICAgICA8aW50PiAgICAgICAgIDxpbnQ+CiAxIENocmlzIFJlbmF1ZCAgICAgICAgICAgICAgICAzICAgIDIwNDQ1MDAwMDAKIDIgWmFjayBTbnlkZXIgICAgICAgICAgICAgICAgIDIgICAgMTU0MDcwMDAwMAogMyBGcmFuY2lzIExhd3JlbmNlICAgICAgICAgICAgMiAgICAxNDA4ODAwMDAwCiA0IEJyeWFuIFNpbmdlciAgICAgICAgICAgICAgICAyICAgIDEyOTI1MDAwMDAKIDUgU3RldmUgTWFydGlubyAgICAgICAgICAgICAgIDIgICAgMTEyMzIwMDAwMAogNiBSaWRsZXkgU2NvdHQgICAgICAgICAgICAgICAgMiAgICAxMDMzNjAwMDAwCiA3IEp1c3RpbiBMaW4gICAgICAgICAgICAgICAgICAyICAgIDEwMzE3MDAwMDAKIDggUGhpbCBMb3JkICAgICAgICAgICAgICAgICAgIDMgICAgMTAwMjAwMDAwMAogOSBQZXRlciBKYWNrc29uICAgICAgICAgICAgICAgMSAgICAgOTU2MDAwMDAwCjEwIERhdmlkIEF5ZXIgICAgICAgICAgICAgICAgICA0ICAgICA5MTQxMDAwMDAKIyDihLkgNDA0IG1vcmUgcm93cwojIOKEuSBVc2UgYHByaW50KG4gPSAuLi4pYCB0byBzZWUgbW9yZSByb3dzCj4gClRoYXQgbWVhbnMgeW91ciBncm91cGluZywgc3VtbWFyaXppbmcsIGFuZCBzb3J0aW5nIGFyZSBub3cgYWxsIHdvcmtpbmcgY29ycmVjdGx5IGluIFJTdHVkaW8uCgpZb3Ugbm93IGhhdmUgYSBuaWNlIHN1bW1hcnkgdGFibGUgc2hvd2luZzoKCkRpcmVjdG9yIG5hbWUgKERpcmVjdG9yIF8xXykKCk51bWJlciBvZiBtb3ZpZXMgKE1vdmllc19jb3VudCkKClRvdGFsIHJldmVudWUgKFRvdGFsX1JldmVudWUpLCBvcmRlcmVkIGZyb20gaGlnaGVzdCB0byBsb3dlc3QuCgoKVGhpcyBpcyBhbiBbUiBNYXJrZG93bl0oaHR0cDovL3JtYXJrZG93bi5yc3R1ZGlvLmNvbSkgTm90ZWJvb2suIFdoZW4geW91IGV4ZWN1dGUgY29kZSB3aXRoaW4gdGhlIG5vdGVib29rLCB0aGUgcmVzdWx0cyBhcHBlYXIgYmVuZWF0aCB0aGUgY29kZS4gCgpUcnkgZXhlY3V0aW5nIHRoaXMgY2h1bmsgYnkgY2xpY2tpbmcgdGhlICpSdW4qIGJ1dHRvbiB3aXRoaW4gdGhlIGNodW5rIG9yIGJ5IHBsYWNpbmcgeW91ciBjdXJzb3IgaW5zaWRlIGl0IGFuZCBwcmVzc2luZyAqQ3RybCtTaGlmdCtFbnRlciouIAoKYGBge3J9CnBsb3QoY2FycykKYGBgCgpBZGQgYSBuZXcgY2h1bmsgYnkgY2xpY2tpbmcgdGhlICpJbnNlcnQgQ2h1bmsqIGJ1dHRvbiBvbiB0aGUgdG9vbGJhciBvciBieSBwcmVzc2luZyAqQ3RybCtBbHQrSSouCgpXaGVuIHlvdSBzYXZlIHRoZSBub3RlYm9vaywgYW4gSFRNTCBmaWxlIGNvbnRhaW5pbmcgdGhlIGNvZGUgYW5kIG91dHB1dCB3aWxsIGJlIHNhdmVkIGFsb25nc2lkZSBpdCAoY2xpY2sgdGhlICpQcmV2aWV3KiBidXR0b24gb3IgcHJlc3MgKkN0cmwrU2hpZnQrSyogdG8gcHJldmlldyB0aGUgSFRNTCBmaWxlKS4KClRoZSBwcmV2aWV3IHNob3dzIHlvdSBhIHJlbmRlcmVkIEhUTUwgY29weSBvZiB0aGUgY29udGVudHMgb2YgdGhlIGVkaXRvci4gQ29uc2VxdWVudGx5LCB1bmxpa2UgKktuaXQqLCAqUHJldmlldyogZG9lcyBub3QgcnVuIGFueSBSIGNvZGUgY2h1bmtzLiBJbnN0ZWFkLCB0aGUgb3V0cHV0IG9mIHRoZSBjaHVuayB3aGVuIGl0IHdhcyBsYXN0IHJ1biBpbiB0aGUgZWRpdG9yIGlzIGRpc3BsYXllZC4KZ2dwbG90KGRhdGE9TW92aWVzKQo=</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiTW92aWVzIE5vdGVib29rIgpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sKZWRpdG9yX29wdGlvbnM6IAogIG1hcmtkb3duOiAKICAgIHdyYXA6IDcyCi0tLQoKMS4gIFwqXCpSZWFkIHRoZSBEYXRhIEZpbGUgKE1vdmllcy5jc3YpIElmIHlvdSBoYXZlIHRoZSBNb3ZpZXMuY3N2IGZpbGUKICAgIHVwbG9hZGVkIG9yIHBsYWNlZCBpbiBhIGRpcmVjdG9yeSwgeW91IGNhbiB1c2UgdGhlIHJlYWQuY3N2IGZ1bmN0aW9uCiAgICB0byBsb2FkIGl0IGludG8gUi4gXCMgUmVhZCBhbmQgbG9hZCB0aGUgZGF0YSAoTW92aWVzLmNzdiBmaWxlKSBpbnRvCiAgICBhIGRhdGEgZnJhbWUKCmluc3RhbGwucGFja2FnZXMoInJlYWRyIikgbGlicmFyeShyZWFkcikgbW92aWVzX2RhdGEgXDwtCnJlYWQuY3N2KCJwYXRoL3RvL01vdmllcy5jc3YiKQoKMi4gICMgRGF0YSBjbGVhbmluZyBzdGVwcyB5b3UgY2FuIHBlcmZvcm0gaW4gUlN0dWRpbyBDbG91ZDoKCkxvYWQgeW91ciBkYXRhIChlLmcuLCBmcm9tIENTVikuCgpFeHBsb3JlIHRoZSBkYXRhIHVzaW5nIGhlYWQoKSwgc3VtbWFyeSgpLCBhbmQgc3RyKCkuCgpIYW5kbGUgbWlzc2luZyB2YWx1ZXM6IFJlbW92ZSBvciBpbXB1dGUgd2l0aCBtZWFuL21lZGlhbi4KClJlbW92ZSBkdXBsaWNhdGVzIHdpdGggZHVwbGljYXRlZCgpLgoKRml4IGNvbHVtbiBuYW1lcyB0byBhdm9pZCBzcGFjZXMgYW5kIHNwZWNpYWwgY2hhcmFjdGVycy4KCkZpbHRlciBvdXQgaXJyZWxldmFudCByb3dzIG9yIGNvbHVtbnMuCgpUcmFuc2Zvcm0gZGF0YSAoZS5nLiwgY29udmVydGluZyB0eXBlcywgY3JlYXRpbmcgbmV3IGNvbHVtbnMpLgoKSGFuZGxlIG91dGxpZXJzIGJ5IHJlbW92aW5nIG9yIGNvcnJlY3RpbmcuCgpTdGFuZGFyZGl6ZSBjYXRlZ29yaWNhbCB2YXJpYWJsZXMgZm9yIGNvbnNpc3RlbmN5LgoKU2F2ZSB5b3VyIGNsZWFuZWQgZGF0YSB0byBhIG5ldyBmaWxlLgoKCgoKU3VtbWFyaXplIHRoZSBEYXRhIFlvdSBjYW4gdXNlIHRoZSBkcGx5ciBwYWNrYWdlIHRvIGdyb3VwIGJ5CiAgICBEaXJlY3Rvcl8xIGFuZCBjYWxjdWxhdGUgdGhlIGNvdW50IG9mIG1vdmllcyBhbmQgdGhlIHN1bSBvZiByZXZlbnVlLgoKRmlyc3QsIG1ha2Ugc3VyZSB5b3UgaGF2ZSB0aGUgZHBseXIgcGFja2FnZSBpbnN0YWxsZWQ6CgpJbnN0YWxsIGRwbHlyIGlmIHlvdSBoYXZlbid0IGFscmVhZHkgYGluc3RhbGwucGFja2FnZXMoImRwbHlyIilgCgpUaGVuLCB1c2UgdGhlIGZvbGxvd2luZyBjb2RlIHRvIGdyb3VwIHRoZSBkYXRhIGFuZCBjYWxjdWxhdGUgdGhlCnJlcXVpcmVkIHN1bW1hcnk6IFwjIExvYWQgdGhlIGRwbHlyIHBhY2thZ2UgbGlicmFyeShkcGx5cikKCiMgVmlldyB0aGUgZmlyc3QgZmV3IHJvd3Mgb2YgdGhlIGRhdGEKCmhlYWQobW92aWVzX2RhdGEpCgojU3RlcHMgdG8gZGF0YSBDbGVhbmluZyBmaXJzdCBvZiBhbGwgZXhwbG9yZSB0aGUgZGF0YSBhbmQgVmlldyB0aGUgZmlyc3QKZmV3IHJvd3Mgb2YgdGhlIGRhdGEgaGVhZChtb3ZpZXNfZGF0YSkgTW92aWUuVGl0bGUgUmVsZWFzZS5EYXRlCldpa2lwZWRpYS5VUkwgR2VucmUgMSAyMiBKdW1wIFN0cmVldCAyMDE0LTA2LTA0CjxodHRwczovL2VuLndpa2lwZWRpYS5vcmcvd2lraS8yMl9KdW1wX1N0cmVldD4gQWN0aW9uIDIgNzEgMjAxNC0wMi0wNwpbaHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvJTI1Mjc3MVxfKGZpbG0pXShodHRwczovL2VuLndpa2lwZWRpYS5vcmcvd2lraS8lMjUyNzcxXyhmaWxtKSl7LnVyaX0KQWN0aW9uIDMgQSBHb29kIERheSB0byBEaWUgSGFyZCAyMDEzLTAyLTE0CjxodHRwczovL2VuLndpa2lwZWRpYS5vcmcvd2lraS9BX0dvb2RfRGF5X3RvX0RpZV9IYXJkPiBBY3Rpb24gNApCYXR0bGVzaGlwIDIwMTItMDUtMTgKW2h0dHBzOi8vZW4ud2lraXBlZGlhLm9yZy93aWtpL0JhdHRsZXNoaXBcXyhmaWxtKV0oaHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvQmF0dGxlc2hpcF8oZmlsbSkpey51cml9CkFjdGlvbiA1IEJsYWNrIE1hc3MgMjAxNS0wOS0wNApbaHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvQmxhY2tfTWFzc1xfKGZpbG0pXShodHRwczovL2VuLndpa2lwZWRpYS5vcmcvd2lraS9CbGFja19NYXNzXyhmaWxtKSl7LnVyaX0KQWN0aW9uIDYgQ3JpbWluYWwgMjAxNi0wNC0xNQpbaHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvQ3JpbWluYWxcXygyMDE2X2ZpbG0pXShodHRwczovL2VuLndpa2lwZWRpYS5vcmcvd2lraS9DcmltaW5hbF8oMjAxNl9maWxtKSl7LnVyaX0KQWN0aW9uIERpcmVjdG9yLlxfMVxfIERpcmVjdG9yLlxfMlxfIENhc3QuXF8xXF8gQ2FzdC5cXzJcXyBDYXN0LlxfM1xfCkNhc3QuXF80XF8gMSBQaGlsIExvcmQgQ2hyaXMgTWlsbGVyIENoYW5uaW5nIFRhdHVtIEpvbmFoIEhpbGwgSWNlIEN1YmVcCjIgWWFubiBEZW1hbmdlIEphY2sgTydDb25uZWxsIFJpY2hhcmQgRG9ybWVyIFNlYW4gSGFycmlzIFNhbSBSZWlkIDMgSm9obgpNb29yZSBCcnVjZSBXaWxsaXMgSmFpIENvdXJ0bmV5IFNlYmFzdGlhbiBLb2NoIFl1bGl5YSBTbmlnaXIgNCBQZXRlcgpCZXJnIEFsZXhhbmRlciBTa2Fyc2fDpXJkIFRheWxvciBLaXRzY2ggQnJvb2tseW4gRGVja2VyIFJpaGFubmEgNSBTY290dApDb29wZXIgSm9obm55IERlcHAgSm9lbCBFZGdlcnRvbiBCZW5lZGljdCBDdW1iZXJiYXRjaCBTaWVubmEgTWlsbGVyIDYKQXJpZWwgVnJvbWVuIEtldmluIENvc3RuZXIgR2FyeSBPbGRtYW4gVG9tbXkgTGVlIEpvbmVzIEFsaWNlIEV2ZQpDYXN0LlxfNVxfIEJ1ZGdldCBSZXZlbnVlIDEgODQ1MDAwMDAgMzMxMzAwMDAwIDIgODEwMDAwMCAyOTAwMDAwIDMKUmFkaXZvamUgQnVrdmnEhyA5MjAwMDAwMCAzMDQ3MDAwMDAgNCBMaWFtIE5lZXNvbiAyMjAwMDAwMDAgMzAzMDAwMDAwIDUKRGFrb3RhIEpvaG5zb24gNTMwMDAwMDAgOTk4MDAwMDAgNiBHYWwgR2Fkb3QgMzE1MDAwMDAgMzU2MDAwMDAgXCMgQ2hlY2sKdGhlIHN0cnVjdHVyZSBvZiB0aGUgZGF0YXNldCAoY29sdW1uIG5hbWVzLCBkYXRhIHR5cGVzKQoKc3RyKG1vdmllc19kYXRhKSAnZGF0YS5mcmFtZSc6IDUwOCBvYnMuIG9mIDEzIHZhcmlhYmxlczogXCQgTW92aWUuVGl0bGUKOiBjaHIgIjIyIEp1bXAgU3RyZWV0IiAiNzEiICJBIEdvb2QgRGF5IHRvIERpZSBIYXJkIiAiQmF0dGxlc2hpcCIgLi4uIFwkClJlbGVhc2UuRGF0ZSA6IGNociAiMjAxNC0wNi0wNCIgIjIwMTQtMDItMDciICIyMDEzLTAyLTE0IiAiMjAxMi0wNS0xOCIKLi4uIFwkIFdpa2lwZWRpYS5VUkw6IGNocgoiPGh0dHBzOi8vZW4ud2lraXBlZGlhLm9yZy93aWtpLzIyX0p1bXBfU3RyZWV0PiIKIltodHRwczovL2VuLndpa2lwZWRpYS5vcmcvd2lraS8lMjUyNzcxXF8oZmlsbSldKGh0dHBzOi8vZW4ud2lraXBlZGlhLm9yZy93aWtpLyUyNTI3NzFfKGZpbG0pKXsudXJpfSIKIjxodHRwczovL2VuLndpa2lwZWRpYS5vcmcvd2lraS9BX0dvb2RfRGF5X3RvX0RpZV9IYXJkPiIKIltodHRwczovL2VuLndpa2lwZWRpYS5vcmcvd2lraS9CYXR0bGVzaGlwXF8oZmlsbSldKGh0dHBzOi8vZW4ud2lraXBlZGlhLm9yZy93aWtpL0JhdHRsZXNoaXBfKGZpbG0pKXsudXJpfSIKLi4uIFwkIEdlbnJlIDogY2hyICJBY3Rpb24iICJBY3Rpb24iICJBY3Rpb24iICJBY3Rpb24iIC4uLiBcJApEaXJlY3Rvci5cXzFcXyA6IGNociAiUGhpbCBMb3JkIiAiWWFubiBEZW1hbmdlIiAiSm9obiBNb29yZSIgIlBldGVyCkJlcmciIC4uLiBcJCBEaXJlY3Rvci5cXzJcXyA6IGNociAiQ2hyaXMgTWlsbGVyIiAiIiAiIiAiIiAuLi4gXCQKQ2FzdC5cXzFcXyA6IGNociAiQ2hhbm5pbmcgVGF0dW0iICJKYWNrIE8nQ29ubmVsbCIgIkJydWNlIFdpbGxpcyIKIkFsZXhhbmRlciBTa2Fyc2fDpXJkIiAuLi4gXCQgQ2FzdC5cXzJcXyA6IGNociAiSm9uYWggSGlsbCIgIlJpY2hhcmQKRG9ybWVyIiAiSmFpIENvdXJ0bmV5IiAiVGF5bG9yIEtpdHNjaCIgLi4uIFwkIENhc3QuXF8zXF8gOiBjaHIgIkljZQpDdWJlIiAiU2VhbiBIYXJyaXMiICJTZWJhc3RpYW4gS29jaCIgIkJyb29rbHluIERlY2tlciIgLi4uIFwkIENhc3QuXF80XF8KOiBjaHIgIiIgIlNhbSBSZWlkIiAiWXVsaXlhIFNuaWdpciIgIlJpaGFubmEiIC4uLiBcJCBDYXN0LlxfNVxfIDogY2hyICIiCiIiICJSYWRpdm9qZSBCdWt2acSHIiAiTGlhbSBOZWVzb24iIC4uLiBcJCBCdWRnZXQgOiBpbnQgODQ1MDAwMDAgODEwMDAwMAo5MjAwMDAwMCAyMjAwMDAwMDAgNTMwMDAwMDAgMzE1MDAwMDAgMjM1MDAwMDAwIDE0MDAwMDAwMCA5NDAwMDAwMAoyMjUwMDAwMDAgLi4uIFwkIFJldmVudWUgOiBpbnQgMzMxMzAwMDAwIDI5MDAwMDAgMzA0NzAwMDAwIDMwMzAwMDAwMAo5OTgwMDAwMCAzNTYwMDAwMCA3MTA2MDAwMDAgMTQ1NzAwMDAwIDQxNDQwMDAwMCA2NjgwMDAwMDAgLi4uCgojIFN1bW1hcml6ZSB0aGUgZGF0YTogY291bnQgbW92aWVzIGFuZCBzdW0gcmV2ZW51ZSBieSBEaXJlY3Rvcl8xCgpzdW1tYXJ5X2RhdGEgXDwtIG1vdmllc19kYXRhICVcPiUgZ3JvdXBfYnkoRGlyZWN0b3JfMSkgJVw+JSBzdW1tYXJpc2UoCk1vdmllc19jb3VudCA9IG4oKSwgXCMgQ291bnQgdGhlIG51bWJlciBvZiBtb3ZpZXMgcGVyIGRpcmVjdG9yClRvdGFsX1JldmVudWUgPSBzdW0oUmV2ZW51ZSwgbmEucm0gPSBUUlVFKSBcIyBTdW0gb2YgUmV2ZW51ZSwgaWdub3JpbmcKTkEgdmFsdWVzICkgJVw+JSBhcnJhbmdlKGRlc2MoVG90YWxfUmV2ZW51ZSkpIFwjIE9yZGVyIGJ5IFRvdGFsX1JldmVudWUKaW4gZGVzY2VuZGluZyBvcmRlcgoKU2F2ZSB0aGUgUmVzdWx0IGFzIGEgTmV3IFRhYmxlIChPcHRpb25hbCkgSWYgeW91J2QgbGlrZSB0byBzYXZlIHRoZQpyZXN1bHQgdG8gYSBuZXcgQ1NWIGZpbGU6CgojIFNhdmUgdGhlIHN1bW1hcml6ZWQgcmVzdWx0IHRvIGEgbmV3IENTViBmaWxlCgp3cml0ZS5jc3Yoc3VtbWFyeV9kYXRhLCAiRGlyZWN0b3IxX3N1bW1hcnkuY3N2Iiwgcm93Lm5hbWVzID0gRkFMU0UpIFRoaXMKd2lsbCBzYXZlIHRoZSBzdW1tYXJpemVkIGRhdGEgd2l0aCBkaXJlY3RvcnMsIG1vdmllIGNvdW50cywgYW5kIHRvdGFsCnJldmVudWUgYXMgYSBuZXcgQ1NWIGZpbGUgY2FsbGVkIERpcmVjdG9yMV9zdW1tYXJ5LmNzdi4KCiMgVmlldyB0aGUgcmVzdWx0dW1tYXJ5X2RhdGEgXDwtIG1vdmllc19kYXRhICVcPiUKCnN1bW1hcnlfZGF0YSBcPC0gbW92aWVzX2RhdGEgJVw+JSArIGdyb3VwX2J5KERpcmVjdG9yLlxfMVxfKSAlXD4lICsKc3VtbWFyaXNlKCArIE1vdmllc19jb3VudCA9IG4oKSwgKyBUb3RhbF9SZXZlbnVlID0gc3VtKFJldmVudWUsIG5hLnJtID0KVFJVRSkgKyApICVcPiUgKyBhcnJhbmdlKGRlc2MoVG90YWxfUmV2ZW51ZSkpIHByaW50KHN1bW1hcnlfZGF0YSkKCiMgVmlldyB0aGUgcmVzdWx0Cgo+IHByaW50KHN1bW1hcnlfZGF0YSkKCiMgQSB0aWJibGU6IDQxNCDDlyAzCgpEaXJlY3Rvci5cXzFcXyBNb3ZpZXNfY291bnQgVG90YWxfUmV2ZW51ZSA8Y2hyPiA8aW50PiA8aW50PiAxIENocmlzClJlbmF1ZCAzIDIwNDQ1MDAwMDAgMiBaYWNrIFNueWRlciAyIDE1NDA3MDAwMDAgMyBGcmFuY2lzIExhd3JlbmNlIDIKMTQwODgwMDAwMCA0IEJyeWFuIFNpbmdlciAyIDEyOTI1MDAwMDAgNSBTdGV2ZSBNYXJ0aW5vIDIgMTEyMzIwMDAwMCA2ClJpZGxleSBTY290dCAyIDEwMzM2MDAwMDAgNyBKdXN0aW4gTGluIDIgMTAzMTcwMDAwMCA4IFBoaWwgTG9yZCAzCjEwMDIwMDAwMDAgOSBQZXRlciBKYWNrc29uIDEgOTU2MDAwMDAwIDEwIERhdmlkIEF5ZXIgNCA5MTQxMDAwMDAgXCMg4oS5CjQwNCBtb3JlIHJvd3MgXCMg4oS5IFVzZSBgcHJpbnQobiA9IC4uLilgIHRvIHNlZSBtb3JlIHJvd3MKCiMgVGhhdCBtZWFucyB5b3VyIGdyb3VwaW5nLCBzdW1tYXJpemluZywgYW5kIHNvcnRpbmcgYXJlIG5vdyBhbGwgd29ya2luZyBjb3JyZWN0bHkgaW4gUlN0dWRpby4KCllvdSBub3cgaGF2ZSBhIG5pY2Ugc3VtbWFyeSB0YWJsZSBzaG93aW5nOgoKRGlyZWN0b3IgbmFtZSAoRGlyZWN0b3IgKjEqKQoKTnVtYmVyIG9mIG1vdmllcyAoTW92aWVzX2NvdW50KQoKVG90YWwgcmV2ZW51ZSAoVG90YWxfUmV2ZW51ZSksIG9yZGVyZWQgZnJvbSBoaWdoZXN0IHRvIGxvd2VzdC4KCiMgUmVtb3ZlIHJvd3Mgd2l0aCBhbnkgbWlzc2luZyB2YWx1ZXMKCm1vdmllc19kYXRhX2NsZWFuIFw8LSBuYS5vbWl0KG1vdmllc19kYXRhKSBSZW1vdmluZyByb3dzIHdpdGggbWlzc2luZwp2YWx1ZXMuCgojIEZpbGwgTkEgdmFsdWVzIGluIGEgc3BlY2lmaWMgY29sdW1uIHdpdGggdGhlIGNvbHVtbidzIG1lYW4KCm1vdmllc19kYXRhJFJldmVudWVbaXMubmEobW92aWVzX2RhdGEkUmV2ZW51ZSldIFw8LQptZWFuKG1vdmllc19kYXRhXCRSZXZlbnVlLCBuYS5ybSA9IFRSVUUpIFlvdSBjYW4gZmlsbCBtaXNzaW5nIHZhbHVlcwp3aXRoIHRoZSBtZWFuLCBtZWRpYW4sIG9yIG1vZGUsIGRlcGVuZGluZyBvbiB0aGUgbmF0dXJlIG9mIHRoZSBjb2x1bW4uClwjIFJlbW92ZSBkdXBsaWNhdGUgcm93cyBtb3ZpZXNfZGF0YV9jbGVhbiBcPC0KbW92aWVzX2RhdGFbIWR1cGxpY2F0ZWQobW92aWVzX2RhdGEpLCBdCgpbVGhpcyBpcyBhbiBbUiBNYXJrZG93bl0oaHR0cDovL3JtYXJrZG93bi5yc3R1ZGlvLmNvbSkgTm90ZWJvb2suIFdoZW4KeW91IGV4ZWN1dGUgY29kZSB3aXRoaW4gdGhlIG5vdGVib29rLCB0aGUgcmVzdWx0cyBhcHBlYXIgYmVuZWF0aCB0aGUKY29kZS4KClRyeSBleGVjdXRpbmcgdGhpcyBjaHVuayBieSBjbGlja2luZyB0aGUgKlJ1biogYnV0dG9uIHdpdGhpbiB0aGUgY2h1bmsKb3IgYnkgcGxhY2luZyB5b3VyIGN1cnNvciBpbnNpZGUgaXQgYW5kIHByZXNzaW5nICpDdHJsK1NoaWZ0K0VudGVyKi4KCmBgYHtyfQpwbG90KGNhcnMpCmBgYAoKQWRkIGEgbmV3IGNodW5rIGJ5IGNsaWNraW5nIHRoZSAqSW5zZXJ0IENodW5rKiBidXR0b24gb24gdGhlIHRvb2xiYXIgb3IKYnkgcHJlc3NpbmcgKkN0cmwrQWx0K0kqLgoKV2hlbiB5b3Ugc2F2ZSB0aGUgbm90ZWJvb2ssIGFuIEhUTUwgZmlsZSBjb250YWluaW5nIHRoZSBjb2RlIGFuZCBvdXRwdXQKd2lsbCBiZSBzYXZlZCBhbG9uZ3NpZGUgaXQgKGNsaWNrIHRoZSAqUHJldmlldyogYnV0dG9uIG9yIHByZXNzCipDdHJsK1NoaWZ0K0sqIHRvIHByZXZpZXcgdGhlIEhUTUwgZmlsZSkuCgpUaGUgcHJldmlldyBzaG93cyB5b3UgYSByZW5kZXJlZCBIVE1MIGNvcHkgb2YgdGhlIGNvbnRlbnRzIG9mIHRoZQplZGl0b3IuIENvbnNlcXVlbnRseSwgdW5saWtlICpLbml0KiwgKlByZXZpZXcqIGRvZXMgbm90IHJ1biBhbnkgUiBjb2RlCmNodW5rcy4gSW5zdGVhZCwgdGhlIG91dHB1dCBvZiB0aGUgY2h1bmsgd2hlbiBpdCB3YXMgbGFzdCBydW4gaW4gdGhlCmVkaXRvciBpcyBkaXNwbGF5ZWQuIGdncGxvdChkYXRhPU1vdmllcykgXQo=</div>
 
 
 
